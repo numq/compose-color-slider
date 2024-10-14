@@ -31,7 +31,7 @@ fun ColorSlider(
 ) {
     require(color.isSpecified) { "Color should be specified" }
 
-    val updatedOnChangeColor by rememberUpdatedState(onColorChange)
+    val updatedOnColorChange by rememberUpdatedState(onColorChange)
 
     val saturation by remember(color) {
         derivedStateOf {
@@ -86,7 +86,7 @@ fun ColorSlider(
 
         LaunchedEffect(calculatedColor) {
             if (calculatedColor != color) {
-                updatedOnChangeColor(calculatedColor)
+                updatedOnColorChange(calculatedColor)
             }
         }
 
