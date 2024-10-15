@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import library.extension.hue
-import library.extension.saturation
-import library.extension.value
 
 @Composable
 fun ColorSlider(
@@ -32,18 +30,6 @@ fun ColorSlider(
     require(color.isSpecified) { "Color should be specified" }
 
     val updatedOnColorChange by rememberUpdatedState(onColorChange)
-
-    val saturation by remember(color) {
-        derivedStateOf {
-            color.saturation()
-        }
-    }
-
-    val value by remember(color) {
-        derivedStateOf {
-            color.value()
-        }
-    }
 
     var indicatorOffsetPercentage by remember { mutableStateOf(Offset.Zero) }
 
@@ -74,12 +60,12 @@ fun ColorSlider(
             }
         }
 
-        val calculatedColor by remember(indicatorOffset, trackSize, saturation, value) {
+        val calculatedColor by remember(indicatorOffset, trackSize) {
             derivedStateOf {
                 Color.hsv(
                     hue = indicatorOffset.x / trackSize.width * 360f,
-                    saturation = saturation,
-                    value = value
+                    saturation = 1f,
+                    value = 1f
                 )
             }
         }
@@ -104,7 +90,7 @@ fun ColorSlider(
         }) {
             drawLine(
                 brush = Brush.horizontalGradient(colors = List(360) { angle ->
-                    Color.hsv(hue = angle.toFloat(), saturation = saturation, value = value)
+                    Color.hsv(hue = angle.toFloat(), saturation = 1f, value = 1f)
                 }),
                 start = Offset(x = thumbRadius, y = trackSize.height),
                 end = Offset(x = trackSize.width + thumbRadius, y = trackSize.height),
