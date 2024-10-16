@@ -31,17 +31,9 @@ fun ColorSlider(
 
     val updatedOnColorChange by rememberUpdatedState(onColorChange)
 
-    var indicatorOffsetPercentage by remember { mutableStateOf(Offset.Zero) }
-
-    val calculatedIndicatorOffsetPercentage by remember(color) {
+    val indicatorOffsetPercentage by remember(color) {
         derivedStateOf {
             Offset(x = color.hue() / 360f, y = 0f)
-        }
-    }
-
-    LaunchedEffect(calculatedIndicatorOffsetPercentage) {
-        if (calculatedIndicatorOffsetPercentage != indicatorOffsetPercentage) {
-            indicatorOffsetPercentage = calculatedIndicatorOffsetPercentage
         }
     }
 
@@ -60,31 +52,27 @@ fun ColorSlider(
             }
         }
 
-        val calculatedColor by remember(indicatorOffset, trackSize) {
-            derivedStateOf {
-                Color.hsv(
-                    hue = indicatorOffset.x / trackSize.width * 360f,
-                    saturation = 1f,
-                    value = 1f
-                )
-            }
-        }
-
-        LaunchedEffect(calculatedColor) {
-            if (calculatedColor != color) {
-                updatedOnColorChange(calculatedColor)
-            }
-        }
-
         Canvas(modifier = Modifier.fillMaxWidth().height(thumbRadius.dp * 2f).pointerInput(Unit) {
             detectTapGestures(onTap = { (x, _) ->
-                indicatorOffsetPercentage = Offset(x = (x / size.width).coerceIn(0f, 1f), y = 0f)
+                updatedOnColorChange(
+                    Color.hsv(
+                        hue = (x / size.width).coerceIn(0f, 1f) * 360f,
+                        saturation = 1f,
+                        value = 1f
+                    )
+                )
             })
         }.pointerInput(Unit) {
             detectDragGestures { change, _ ->
                 change.consume()
                 change.position.let { (x, _) ->
-                    indicatorOffsetPercentage = Offset(x = (x / size.width).coerceIn(0f, 1f), y = 0f)
+                    updatedOnColorChange(
+                        Color.hsv(
+                            hue = (x / size.width).coerceIn(0f, 1f) * 360f,
+                            saturation = 1f,
+                            value = 1f
+                        )
+                    )
                 }
             }
         }) {

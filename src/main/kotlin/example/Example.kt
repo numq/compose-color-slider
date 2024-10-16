@@ -32,9 +32,7 @@ fun main() = singleWindowApplication(title = "Color Slider") {
         ColorSlider(modifier = Modifier.fillMaxWidth(), color = backgroundColor, onColorChange = setBackgroundColor)
         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
             RGBControls(
-                modifier = Modifier.fillMaxWidth(),
-                color = backgroundColor,
-                onColorChange = setBackgroundColor
+                modifier = Modifier.fillMaxWidth(), color = backgroundColor, onColorChange = setBackgroundColor
             )
         }
     }
