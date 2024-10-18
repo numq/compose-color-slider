@@ -10,90 +10,96 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathOperation
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import library.extension.hue
 
 @Composable
 fun ColorSlider(
     modifier: Modifier,
     thumbRadius: Float = 8f,
     thumbColor: Color = Color.White,
-    color: Color,
-    onColorChange: (Color) -> Unit,
+    gradientBrush: Brush,
+    indicatorOffsetPercentage: Float,
+    onIndicatorOffsetPercentageChange: (Float) -> Unit,
 ) {
-    require(color.isSpecified) { "Color should be specified" }
-
-    val updatedOnColorChange by rememberUpdatedState(onColorChange)
-
-    val indicatorOffsetPercentage by remember(color) {
-        derivedStateOf {
-            Offset(x = color.hue() / 360f, y = 0f)
-        }
-    }
+    val updatedOnIndicatorOffsetPercentageChange by rememberUpdatedState(onIndicatorOffsetPercentageChange)
 
     BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
         val sliderSize = remember(maxWidth, thumbRadius) {
             Size(width = maxWidth.value, height = thumbRadius * 2f)
         }
 
-        val trackSize = remember(sliderSize, thumbRadius) {
-            Size(width = sliderSize.width - (thumbRadius * 2f), height = thumbRadius)
+        val innerRadius = remember(thumbRadius) {
+            thumbRadius / 2f
+        }
+
+        val thumbThickness = remember(thumbRadius, innerRadius) {
+            thumbRadius - innerRadius
+        }
+
+        val trackSize = remember(sliderSize, thumbRadius, thumbThickness) {
+            Size(width = sliderSize.width - thumbThickness * 2f, height = thumbRadius)
         }
 
         val indicatorOffset by remember(trackSize, indicatorOffsetPercentage) {
             derivedStateOf {
-                Offset(x = indicatorOffsetPercentage.x * trackSize.width, y = trackSize.center.y)
+                indicatorOffsetPercentage * trackSize.width
+            }
+        }
+
+        val thumbPath = remember(thumbRadius, innerRadius, thumbThickness) {
+            Path().apply {
+                val outerCircle = Path().apply {
+                    addOval(
+                        Rect(
+                            Offset(-thumbRadius, 0f),
+                            Size(thumbRadius * 2f, thumbRadius * 2f)
+                        )
+                    )
+                }
+
+                val innerCircle = Path().apply {
+                    addOval(
+                        Rect(
+                            Offset(-innerRadius, thumbThickness),
+                            Size(innerRadius * 2f, innerRadius * 2f)
+                        )
+                    )
+                }
+
+                op(outerCircle, innerCircle, PathOperation.Difference)
             }
         }
 
         Canvas(modifier = Modifier.fillMaxWidth().height(thumbRadius.dp * 2f).pointerInput(Unit) {
             detectTapGestures(onTap = { (x, _) ->
-                updatedOnColorChange(
-                    Color.hsv(
-                        hue = (x / size.width).coerceIn(0f, 1f) * 360f,
-                        saturation = 1f,
-                        value = 1f
-                    )
-                )
+                updatedOnIndicatorOffsetPercentageChange((x / size.width).coerceIn(0f, 1f))
             })
         }.pointerInput(Unit) {
             detectDragGestures { change, _ ->
                 change.consume()
                 change.position.let { (x, _) ->
-                    updatedOnColorChange(
-                        Color.hsv(
-                            hue = (x / size.width).coerceIn(0f, 1f) * 360f,
-                            saturation = 1f,
-                            value = 1f
-                        )
-                    )
+                    updatedOnIndicatorOffsetPercentageChange((x / size.width).coerceIn(0f, 1f))
                 }
             }
         }) {
             drawLine(
-                brush = Brush.horizontalGradient(colors = List(360) { angle ->
-                    Color.hsv(hue = angle.toFloat(), saturation = 1f, value = 1f)
-                }),
-                start = Offset(x = thumbRadius, y = trackSize.height),
-                end = Offset(x = trackSize.width + thumbRadius, y = trackSize.height),
+                brush = gradientBrush,
+                start = Offset(x = 0f, y = trackSize.height),
+                end = Offset(x = trackSize.width + thumbThickness * 2f, y = trackSize.height),
                 strokeWidth = trackSize.height
             )
-            drawCircle(
-                color = thumbColor,
-                radius = thumbRadius,
-                center = Offset(x = thumbRadius + indicatorOffset.x, y = trackSize.height)
-            )
-            drawCircle(
-                color = color,
-                radius = thumbRadius * .5f,
-                center = Offset(x = thumbRadius + indicatorOffset.x, y = trackSize.height)
-            )
+
+            translate(left = indicatorOffset + thumbThickness) {
+                drawPath(path = thumbPath, color = thumbColor)
+            }
         }
     }
 }
