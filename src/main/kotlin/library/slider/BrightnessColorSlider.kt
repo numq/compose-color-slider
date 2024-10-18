@@ -9,12 +9,14 @@ fun BrightnessColorSlider(
     modifier: Modifier,
     thumbRadius: Float = 8f,
     thumbColor: Color = Color.White,
-    color: Color,
-    onColorChange: (Color) -> Unit,
+    hue: Float,
+    value: Float,
+    onValueChange: (Float) -> Unit,
 ) = ValueColorSlider(
     modifier = modifier,
     thumbRadius = thumbRadius,
     thumbColor = thumbColor,
-    color = color,
-    onColorChange = onColorChange
+    hue = hue,
+    value = value,
+    onValueChange = onValueChange
 )

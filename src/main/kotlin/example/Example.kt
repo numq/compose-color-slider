@@ -3,6 +3,8 @@ package example
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -12,13 +14,28 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
+import library.extension.hue
+import library.extension.saturation
+import library.extension.value
 import library.slider.BrightnessColorSlider
 import library.slider.HueColorSlider
 import library.slider.SaturationColorSlider
 
 @OptIn(ExperimentalStdlibApi::class)
 fun main() = singleWindowApplication(title = "Color Slider") {
-    val (backgroundColor, setBackgroundColor) = remember { mutableStateOf(Color.Red) }
+    val initialColor = remember { Color.Red }
+
+    val (hue, setHue) = remember { mutableStateOf(initialColor.hue()) }
+
+    val (saturation, setSaturation) = remember { mutableStateOf(initialColor.saturation()) }
+
+    val (value, setValue) = remember { mutableStateOf(initialColor.value()) }
+
+    val backgroundColor by remember(hue, saturation, value) {
+        derivedStateOf {
+            Color.hsv(hue = hue, saturation = saturation, value = value)
+        }
+    }
 
     val indicationColor = remember(backgroundColor) {
         if (backgroundColor.luminance() < .5f) Color.White else Color.Black
@@ -33,27 +50,23 @@ fun main() = singleWindowApplication(title = "Color Slider") {
             Text(text = backgroundColor.toArgb().toHexString(), color = indicationColor)
         }
         HueColorSlider(
-            modifier = Modifier.fillMaxWidth(),
-            color = backgroundColor,
-            onColorChange = setBackgroundColor
+            modifier = Modifier.fillMaxWidth(), hue = hue, onHueChange = setHue
         )
         SaturationColorSlider(
-            modifier = Modifier.fillMaxWidth(),
-            color = backgroundColor,
-            onColorChange = setBackgroundColor
+            modifier = Modifier.fillMaxWidth(), hue = hue, saturation = saturation, onSaturationChange = setSaturation
         )
         BrightnessColorSlider(
-            modifier = Modifier.fillMaxWidth(),
-            color = backgroundColor,
-            onColorChange = setBackgroundColor
+            modifier = Modifier.fillMaxWidth(), hue = hue, value = value, onValueChange = setValue
         )
         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-            RGBControls(
-                modifier = Modifier.fillMaxWidth(),
+            RGBControls(modifier = Modifier.fillMaxWidth(),
                 tint = indicationColor,
                 color = backgroundColor,
-                onColorChange = setBackgroundColor
-            )
+                onColorChange = { color ->
+                    setHue(color.hue())
+                    setSaturation(color.saturation())
+                    setValue(color.value())
+                })
         }
     }
 }

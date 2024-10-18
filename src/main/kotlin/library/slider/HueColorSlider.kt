@@ -1,31 +1,24 @@
 package library.slider
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.isSpecified
-import library.extension.hue
-import library.extension.saturation
-import library.extension.value
 
 @Composable
 fun HueColorSlider(
     modifier: Modifier,
     thumbRadius: Float = 8f,
     thumbColor: Color = Color.White,
-    color: Color,
-    onColorChange: (Color) -> Unit,
+    hue: Float,
+    onHueChange: (Float) -> Unit,
 ) {
-    require(color.isSpecified) { "Color should be specified" }
+    require(hue in 0f..360f) { "Hue should be within 0f..360f" }
 
-    val updatedOnColorChange by rememberUpdatedState(onColorChange)
-
-    val hue by remember(color) {
-        derivedStateOf {
-            color.hue()
-        }
-    }
+    val updatedOnHueChange by rememberUpdatedState(onHueChange)
 
     val gradientBrush = remember {
         Brush.horizontalGradient(colors = List(360) { angle ->
@@ -42,13 +35,7 @@ fun HueColorSlider(
         gradientBrush = gradientBrush,
         indicatorOffsetPercentage = hue / 360f,
         onIndicatorOffsetPercentageChange = { offsetPercentage ->
-            updatedOnColorChange(
-                Color.hsv(
-                    offsetPercentage * 360f,
-                    color.saturation(),
-                    color.value()
-                )
-            )
+            updatedOnHueChange(offsetPercentage * 360f)
         },
     )
 }
