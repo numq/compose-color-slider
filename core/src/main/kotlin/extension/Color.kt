@@ -1,8 +1,8 @@
-package library.extension
+package extension
 
 import androidx.compose.ui.graphics.Color
 
-internal fun Color.hue(): Float {
+fun Color.hue(): Float {
     val max = maxOf(red, green, blue)
     val min = minOf(red, green, blue)
 
@@ -19,7 +19,7 @@ internal fun Color.hue(): Float {
     }
 }
 
-internal fun Color.saturation(): Float {
+fun Color.saturation(): Float {
     val max = maxOf(red, green, blue)
     val min = minOf(red, green, blue)
 
@@ -28,4 +28,4 @@ internal fun Color.saturation(): Float {
     return if (max == 0f) 0f else delta / max
 }
 
-internal fun Color.value() = maxOf(red, green, blue)
+fun Color.value() = maxOf(red, green, blue)

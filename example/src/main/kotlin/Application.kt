@@ -1,5 +1,3 @@
-package example
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -14,12 +12,12 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
-import library.extension.hue
-import library.extension.saturation
-import library.extension.value
-import library.slider.BrightnessColorSlider
-import library.slider.HueColorSlider
-import library.slider.SaturationColorSlider
+import extension.hue
+import extension.saturation
+import extension.value
+import slider.BrightnessColorSlider
+import slider.HueColorSlider
+import slider.SaturationColorSlider
 
 @OptIn(ExperimentalStdlibApi::class)
 fun main() = singleWindowApplication(title = "Color Slider") {
