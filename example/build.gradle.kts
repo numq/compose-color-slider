@@ -13,13 +13,16 @@ version = "1.0.0"
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    maven("https://jitpack.io")
     google()
 }
 
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(project(":library"))
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 compose.desktop {
