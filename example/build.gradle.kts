@@ -41,7 +41,6 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             group = "com.github.numq"
-            artifactId = "example"
             version = "1.0.0"
         }
     }
