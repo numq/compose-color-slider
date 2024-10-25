@@ -9,9 +9,9 @@ group = "com.github.numq"
 version = "1.0.0"
 
 repositories {
+    google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
 }
 
 dependencies {
@@ -27,13 +27,4 @@ tasks.test {
 
 kotlin {
     jvmToolchain(17)
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            group = "com.github.numq"
-            version = "1.0.0"
-        }
-    }
 }

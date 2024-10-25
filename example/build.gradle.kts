@@ -11,9 +11,9 @@ group = "com.github.numq"
 version = "1.0.0"
 
 repositories {
+    google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
 }
 
 dependencies {
@@ -33,15 +33,6 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "compose-color-slider"
             packageVersion = "1.0.0"
-        }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            group = "com.github.numq"
-            version = "1.0.0"
         }
     }
 }
