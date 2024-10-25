@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation(project(":core"))
+    implementation(project(":library"))
 }
 
 compose.desktop {
