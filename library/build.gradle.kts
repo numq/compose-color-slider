@@ -33,7 +33,6 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             group = "com.github.numq"
-            artifactId = "compose-color-slider"
             version = "1.0.0"
         }
     }
