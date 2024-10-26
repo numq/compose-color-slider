@@ -31,7 +31,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "compose-color-slider"
+            packageName = "example"
             packageVersion = "1.0.0"
         }
     }
