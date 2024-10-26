@@ -1,3 +1,5 @@
+package application
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -12,6 +14,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
+import controls.HSVControls
+import controls.RGBControls
 import extension.hue
 import extension.saturation
 import extension.value
@@ -56,15 +60,25 @@ fun main() = singleWindowApplication(title = "Color Slider") {
         BrightnessColorSlider(
             modifier = Modifier.fillMaxWidth(), hue = hue, value = value, onValueChange = setValue
         )
-        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-            RGBControls(modifier = Modifier.fillMaxWidth(),
-                tint = indicationColor,
-                color = backgroundColor,
-                onColorChange = { color ->
-                    setHue(color.hue())
-                    setSaturation(color.saturation())
-                    setValue(color.value())
-                })
-        }
+        RGBControls(
+            modifier = Modifier.fillMaxWidth(),
+            tint = indicationColor,
+            color = backgroundColor,
+            onColorChange = { color ->
+                setHue(color.hue())
+                setSaturation(color.saturation())
+                setValue(color.value())
+            }
+        )
+        HSVControls(
+            modifier = Modifier.fillMaxWidth(),
+            tint = indicationColor,
+            color = backgroundColor,
+            onColorChange = { color ->
+                setHue(color.hue())
+                setSaturation(color.saturation())
+                setValue(color.value())
+            }
+        )
     }
 }
