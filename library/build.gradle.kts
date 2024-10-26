@@ -28,3 +28,14 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            groupId = project.group.toString()
+            artifactId = rootProject.name
+            version = project.version.toString()
+        }
+    }
+}
