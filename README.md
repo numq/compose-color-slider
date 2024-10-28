@@ -6,3 +6,15 @@
 and contains three corresponding sliders: hue, saturation, and value(brightness).
 
 ![Demonstration](media/demo.gif)
+
+## Installation
+
+```
+repositories {
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    implementation("com.github.numq:compose-color-slider:1.0.1")
+}
+```
