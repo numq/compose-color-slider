@@ -1,4 +1,4 @@
-package slider
+package com.github.numq.composecolorslider.slider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,22 +9,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun SaturationColorSlider(
+fun ValueColorSlider(
     modifier: Modifier,
     thumbRadius: Float = 8f,
     thumbColor: Color = Color.White,
     hue: Float,
-    saturation: Float,
-    onSaturationChange: (Float) -> Unit,
+    value: Float,
+    onValueChange: (Float) -> Unit,
 ) {
     require(hue in 0f..360f) { "Hue should be within 0f..360f" }
 
-    require(saturation in 0f..1f) { "Saturation should be within 0f..1f" }
+    require(value in 0f..1f) { "Saturation should be within 0f..1f" }
 
-    val updatedOnSaturationChange by rememberUpdatedState(onSaturationChange)
+    val updatedOnValueChange by rememberUpdatedState(onValueChange)
 
     val gradientBrush = remember(hue) {
-        Brush.horizontalGradient(colors = listOf(Color.hsv(hue, 0f, 1f), Color.hsv(hue, 1f, 1f)))
+        Brush.horizontalGradient(colors = listOf(Color.hsv(hue, 1f, 0f), Color.hsv(hue, 1f, 1f)))
     }
 
     ColorSlider(
@@ -32,9 +32,9 @@ fun SaturationColorSlider(
         thumbRadius = thumbRadius,
         thumbColor = thumbColor,
         gradientBrush = gradientBrush,
-        indicatorOffsetPercentage = saturation,
+        indicatorOffsetPercentage = value,
         onIndicatorOffsetPercentageChange = { offsetPercentage ->
-            updatedOnSaturationChange(offsetPercentage)
+            updatedOnValueChange(offsetPercentage)
         },
     )
 }

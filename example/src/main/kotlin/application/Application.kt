@@ -12,19 +12,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
+import com.github.numq.composecolorslider.extension.hue
+import com.github.numq.composecolorslider.extension.saturation
+import com.github.numq.composecolorslider.extension.value
+import com.github.numq.composecolorslider.slider.BrightnessColorSlider
+import com.github.numq.composecolorslider.slider.HueColorSlider
+import com.github.numq.composecolorslider.slider.SaturationColorSlider
 import controls.HSVControls
 import controls.RGBControls
-import extension.hue
-import extension.saturation
-import extension.value
-import slider.BrightnessColorSlider
-import slider.HueColorSlider
-import slider.SaturationColorSlider
 
 @OptIn(ExperimentalStdlibApi::class)
-fun main() = singleWindowApplication(title = "Color Slider") {
+fun main() = singleWindowApplication(
+    title = "Color Slider",
+    state = WindowState(size = DpSize(width = 512.dp, height = 512.dp))
+) {
     val initialColor = remember { Color.Red }
 
     val (hue, setHue) = remember { mutableStateOf(initialColor.hue()) }

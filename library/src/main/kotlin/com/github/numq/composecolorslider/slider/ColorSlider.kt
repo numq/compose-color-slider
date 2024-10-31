@@ -1,4 +1,4 @@
-package slider
+package com.github.numq.composecolorslider.slider
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures

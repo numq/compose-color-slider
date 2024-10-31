@@ -10,9 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import extension.hue
-import extension.saturation
-import extension.value
+import com.github.numq.composecolorslider.extension.hue
+import com.github.numq.composecolorslider.extension.saturation
+import com.github.numq.composecolorslider.extension.value
 import slider.LabeledSlider
 
 @Composable

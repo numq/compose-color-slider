@@ -1,4 +1,4 @@
-package slider
+package com.github.numq.composecolorslider.slider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

@@ -1,4 +1,4 @@
-package extension
+package com.github.numq.composecolorslider.extension
 
 import androidx.compose.ui.graphics.Color
 
